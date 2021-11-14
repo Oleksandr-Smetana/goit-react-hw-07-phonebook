@@ -1,70 +1,56 @@
-import { createReducer } from '@reduxjs/toolkit';
-import { combineReducers } from 'redux';
-import actions from './contacts-actions';
-import defaultContacts from '../../contacts.json';
+import {
+  createReducer,
+  combineReducers,
+} from '@reduxjs/toolkit';
 
-const items = createReducer(defaultContacts, {
-  [actions.addContact]: (state, { payload }) => {
+import {
+  fetchContactsRequest,
+  fetchContactsSuccess,
+  fetchContactsError,
+  addContactRequest,
+  addContactSuccess,
+  addContactError,
+  deleteContactRequest,
+  deleteContactSuccess,
+  deleteContactError,
+  changeFilter,
+} from './contacts-actions';
+
+const items = createReducer([], {
+  [fetchContactsSuccess]: (_, { payload }) => payload,
+  [addContactSuccess]: (state, { payload }) => {
     let namesArray = state.map(item => item.name);
     if (!namesArray.includes(payload.name)) {
       return [payload, ...state];
     } else {
-      alert(`${payload.name} is already exist`);
+      alert(`${payload.name} is already exist!`);
       return state;
     }
   },
-  [actions.deleteContact]: (state, { payload }) =>
+  [deleteContactSuccess]: (state, { payload }) =>
     state.filter(contact => contact.id !== payload),
 });
 
+const loading = createReducer(false, {
+  [fetchContactsRequest]: () => true,
+  [fetchContactsSuccess]: () => false,
+  [fetchContactsError]: () => false,
+
+  [addContactRequest]: () => true,
+  [addContactSuccess]: () => false,
+  [addContactError]: () => false,
+
+  [deleteContactRequest]: () => true,
+  [deleteContactSuccess]: () => false,
+  [deleteContactError]: () => false,
+});
+
 const filter = createReducer('', {
-  [actions.changeFilter]: (_, { payload }) => {
-    return payload;
-  },
+  [changeFilter]: (_, { payload }) => payload,
 });
 
 export default combineReducers({
   items,
   filter,
+  loading,
 });
-
-// ========== vanilla Redux ==========
-// import { combineReducers } from "redux";
-// import { ADD, DELETE, CHANGE_FILTER } from "./contacts-types";
-// import defaultContacts from "../../contacts.json";
-
-// const items = (state = defaultContacts, { type, payload }) => {
-//   switch (type) {
-//     case ADD: {
-//       let namesArray = state.map((item) => item.name);
-//       if (!namesArray.includes(payload.name)) {
-//         return [payload, ...state];
-//       } else {
-//         alert(`${payload.name} is already exist`);
-//         return state;
-//       }
-//     }
-//     // case ADD:
-//     //   return [payload, ...state];
-
-//     case DELETE:
-//       return state.filter((contact) => contact.id !== payload);
-
-//     default:
-//       return state;
-//   }
-// };
-
-// const filter = (state = "", { type, payload }) => {
-//   switch (type) {
-//     case CHANGE_FILTER:
-//       return payload;
-//     default:
-//       return state;
-//   }
-// };
-
-// export default combineReducers({
-//   items,
-//   filter,
-// });
