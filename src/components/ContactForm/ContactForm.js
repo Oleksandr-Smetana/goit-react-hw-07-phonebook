@@ -1,13 +1,18 @@
+// import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import * as ContactsOperations from '../../redux/contacts/contacts-operations';
+import {
+  // connect,
+  useDispatch,
+} from 'react-redux';
+import { addContact } from '../../redux/contacts/contacts-operations';
 
 import s from './ContactForm.module.css';
 
-function ContactForm({ onSubmit }) {
+export default function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const dispatch = useDispatch();
 
   // запись имени и номера телефона в стейт
   const handleChange = e => {
@@ -25,18 +30,22 @@ function ContactForm({ onSubmit }) {
     }
   };
 
+  // добавлена для dispatch
+  const onSubmit = (name, number) =>
+    dispatch(addContact(name, number));
+
+  // сброс стейта
+  const resetForm = () => {
+    setName('');
+    setNumber('');
+  };
+
   // добавление контакта в список контактов и сброс инпутов
   const handleSubmit = e => {
     e.preventDefault();
 
     onSubmit(name, number);
     resetForm();
-  };
-
-  // сброс стейта
-  const resetForm = () => {
-    setName('');
-    setNumber('');
   };
 
   return (
@@ -76,16 +85,17 @@ function ContactForm({ onSubmit }) {
   );
 }
 
-const mapDispatchToProps = dispatch => ({
-  onSubmit: (name, number) =>
-    dispatch(ContactsOperations.addContact(name, number)),
-});
+// ========== до использования useSelector и useDispatch ==========
+// const mapDispatchToProps = dispatch => ({
+//   onSubmit: (name, number) =>
+//     dispatch(addContact(name, number)),
+// });
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(ContactForm);
+// export default connect(
+//   null,
+//   mapDispatchToProps,
+// )(ContactForm);
 
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};
+// ContactForm.propTypes = {
+//   onSubmit: PropTypes.func.isRequired,
+// };

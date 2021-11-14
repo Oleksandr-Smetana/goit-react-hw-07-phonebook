@@ -16,7 +16,6 @@ axios.defaults.baseURL =
 
 export const fetchContacts = () => dispatch => {
   dispatch(fetchContactsRequest());
-
   // try {
   //   const { data } = axios.get('/contacts');
   //   dispatch(fetchContactsSuccess(data));
@@ -50,4 +49,4 @@ export const deleteContact = contactId => dispatch => {
     .catch(error => dispatch(deleteContactError(error)));
 };
 
-export default (fetchContacts, addContact, deleteContact);
+// export default (fetchContacts, addContact, deleteContact);
