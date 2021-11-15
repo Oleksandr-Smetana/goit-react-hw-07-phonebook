@@ -5,11 +5,16 @@ import {
   useSelector,
   useDispatch,
 } from 'react-redux';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Loader from '../Loader';
 
 import { addContact } from '../../redux/contacts/contacts-operations';
-import { getLoading } from '../../redux/contacts/contacts-selectors';
+import {
+  getAllItems,
+  getLoading,
+} from '../../redux/contacts/contacts-selectors';
 
 import s from './ContactForm.module.css';
 
@@ -17,6 +22,7 @@ export default function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
+  const allContacts = useSelector(getAllItems);
   const isLoading = useSelector(getLoading);
   const dispatch = useDispatch();
 
@@ -37,8 +43,21 @@ export default function ContactForm() {
   };
 
   // добавлено для dispatch
-  const onSubmit = (name, number) =>
-    dispatch(addContact(name, number));
+  const onSubmit = (name, number) => {
+    const duplicateContact = allContacts.find(
+      contact =>
+        contact.name.toLowerCase() === name.toLowerCase(),
+    );
+    if (duplicateContact) {
+      toast.warn(`${name} is already exist!`);
+      return;
+    } else {
+      dispatch(addContact(name, number));
+      toast.success(
+        `${name} successfully added to Phonebook!`,
+      );
+    }
+  };
 
   // сброс стейта
   const resetForm = () => {

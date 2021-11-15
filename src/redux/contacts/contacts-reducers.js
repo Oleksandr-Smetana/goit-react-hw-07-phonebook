@@ -2,8 +2,6 @@ import {
   createReducer,
   combineReducers,
 } from '@reduxjs/toolkit';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 import {
   fetchContactsRequest,
@@ -20,19 +18,18 @@ import {
 
 const items = createReducer([], {
   [fetchContactsSuccess]: (_, { payload }) => payload,
-  [addContactSuccess]: (state, { payload }) => {
-    let namesArray = state.map(item => item.name);
-    if (!namesArray.includes(payload.name)) {
-      toast.success(
-        `${payload.name} successfully added to Phonebook!`,
-      );
-      return [...state, payload];
-    } else {
-      toast.warn(`${payload.name} is already exist!`);
-      // alert(`${payload.name} is already exist!`);
-      return state;
-    }
-  },
+  [addContactSuccess]: (state, { payload }) => [
+    ...state,
+    payload,
+  ],
+  // {
+  //   let namesArray = state.map(item => item.name);
+  //   if (!namesArray.includes(payload.name)) {
+  //     return [...state, payload];
+  //   } else {
+  //     return state;
+  //   }
+  // },
   [deleteContactSuccess]: (state, { payload }) => {
     state.filter(contact => contact.id !== payload);
   },

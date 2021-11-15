@@ -27,8 +27,8 @@ export default function ContactList() {
 
   useEffect(() => dispatch(fetchContacts()), [dispatch]);
 
-  const onDelete = contactId =>
-    dispatch(deleteContact(contactId));
+  // const onDelete = contactId =>
+  //   dispatch(deleteContact(contactId));
 
   return (
     <>
@@ -42,7 +42,7 @@ export default function ContactList() {
               <button
                 className={s.deleteButton}
                 id={id}
-                onClick={() => onDelete(id)}
+                onClick={() => dispatch(deleteContact(id))}
               >
                 Delete
               </button>
