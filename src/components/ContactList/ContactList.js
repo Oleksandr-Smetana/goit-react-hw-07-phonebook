@@ -5,22 +5,30 @@ import {
   useSelector,
   useDispatch,
 } from 'react-redux';
+
+import Loader from '../Loader';
+
 import {
   fetchContacts,
   deleteContact,
 } from '../../redux/contacts/contacts-operations';
-import { getVisibleContacts } from '../../redux/contacts/contacts-selectors';
+import {
+  getVisibleContacts,
+  getLoading,
+} from '../../redux/contacts/contacts-selectors';
 
 import s from './ContactList.module.css';
 
 export default function ContactList() {
   const dispatch = useDispatch();
 
-  useEffect(() => dispatch(fetchContacts()), [dispatch]);
-
+  const isLoading = useSelector(getLoading);
   const contacts = useSelector(getVisibleContacts);
 
-  const onDelete = id => dispatch(deleteContact(id));
+  useEffect(() => dispatch(fetchContacts()), [dispatch]);
+
+  const onDelete = contactId =>
+    dispatch(deleteContact(contactId));
 
   return (
     <>
@@ -46,6 +54,8 @@ export default function ContactList() {
           There are no contacts...
         </p>
       )}
+
+      {isLoading && <Loader />}
     </>
   );
 }

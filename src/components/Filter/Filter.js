@@ -4,12 +4,19 @@ import {
   useSelector,
   useDispatch,
 } from 'react-redux';
+
+import Loader from '../Loader';
+
 import { changeFilter } from '../../redux/contacts/contacts-actions';
-import { getFilter } from '../../redux/contacts/contacts-selectors';
+import {
+  getFilter,
+  getLoading,
+} from '../../redux/contacts/contacts-selectors';
 
 import s from './Filter.module.css';
 
 export default function Filter() {
+  const isLoading = useSelector(getLoading);
   const dispatch = useDispatch();
 
   const value = useSelector(getFilter);
@@ -27,6 +34,8 @@ export default function Filter() {
           onChange={onChange}
         />
       </label>
+
+      {isLoading && <Loader />}
     </div>
   );
 }

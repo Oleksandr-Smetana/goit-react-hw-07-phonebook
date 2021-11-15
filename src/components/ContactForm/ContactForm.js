@@ -2,9 +2,14 @@
 import { useState } from 'react';
 import {
   // connect,
+  useSelector,
   useDispatch,
 } from 'react-redux';
+
+import Loader from '../Loader';
+
 import { addContact } from '../../redux/contacts/contacts-operations';
+import { getLoading } from '../../redux/contacts/contacts-selectors';
 
 import s from './ContactForm.module.css';
 
@@ -12,6 +17,7 @@ export default function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
+  const isLoading = useSelector(getLoading);
   const dispatch = useDispatch();
 
   // запись имени и номера телефона в стейт
@@ -30,7 +36,7 @@ export default function ContactForm() {
     }
   };
 
-  // добавлена для dispatch
+  // добавлено для dispatch
   const onSubmit = (name, number) =>
     dispatch(addContact(name, number));
 
@@ -71,16 +77,22 @@ export default function ContactForm() {
           type="tel"
           name="number"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
+          title="Номер телефона должен состоять из цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
           value={number}
           onChange={handleChange}
           required
         />
       </label>
 
-      <button className={s.submitButton} type="submit">
+      <button
+        className={s.submitButton}
+        type="submit"
+        // disabled={isLoading}
+      >
         Add contact
       </button>
+
+      {isLoading && <Loader />}
     </form>
   );
 }
