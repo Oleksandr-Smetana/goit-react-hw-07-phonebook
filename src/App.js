@@ -15,7 +15,7 @@ export default function Phonebook() {
       <ContactList />
       <ToastContainer
         autoClose={3000}
-        position="bottom-center"
+        position="top-center"
         theme="colored"
       />
     </div>
